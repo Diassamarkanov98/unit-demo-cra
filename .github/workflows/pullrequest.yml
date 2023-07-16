@@ -120,7 +120,7 @@ jobs:
 
       - name: Check CI status
         id: check_status
-        uses: actions/github-script@v4
+        uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
