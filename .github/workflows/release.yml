@@ -27,8 +27,33 @@ jobs:
       - name: Install auto-changelog
         run: npm i -g auto-changelog
 
+      - name: Run unit tests
+        run: npm run test-ci
+        env:
+          UNIT_TEST_REPORT: ${{ steps.run-unit-tests.outputs.test-report }}
+
+      - name: Run e2e tests
+        run: npm run e2e-ci
+        env:
+          E2E_TEST_REPORT: ${{ steps.run-e2e-tests.outputs.test-report }}
+
       - name: Generate changelog
         run: auto-changelog --commit-limit false --template keepachangelog
+        env:
+          UNIT_TEST_REPORT: ${{ steps.run-unit-tests.outputs.test-report }}
+          E2E_TEST_REPORT: ${{ steps.run-e2e-tests.outputs.test-report }}
+
+      - name: Add unit test reports to changelog
+        run: |
+          echo "Unit Test Reports:" >> CHANGELOG.md
+          cat $UNIT_TEST_REPORT >> CHANGELOG.md
+        if: steps.run-unit-tests.outputs.test-report != ''
+
+      - name: Add e2e test reports to changelog
+        run: |
+          echo "E2E Test Reports:" >> CHANGELOG.md
+          cat $E2E_TEST_REPORT >> CHANGELOG.md
+        if: steps.run-e2e-tests.outputs.test-report != ''
 
       - name: Create Issue
         id: create_issue
