@@ -65,7 +65,7 @@ jobs:
       - name: Create 'playwright-report' directory
         run: |
           mkdir playwright-report
-          
+
       - name: Run e2e tests
         run: npm run e2e-ci  
         
@@ -120,7 +120,7 @@ jobs:
 
       - name: Check CI status
         id: check_status
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
