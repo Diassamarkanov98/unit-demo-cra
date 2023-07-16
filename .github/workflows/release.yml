@@ -186,3 +186,20 @@ jobs:
           name: build
           path: build/
           retention-days: 30
+  close-issue:
+    needs: [issue, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+    steps:
+      - name: Close Issue
+        uses: peter-evans/close-issue@v1
+        with:
+          issue-number: ${{ needs.issue.outputs.issue_number }}
+          comment: |
+            Thank you for using the release feature! The release has been deployed successfully.
+            Release details:
+            - Tag: ${{ github.ref_name }}
+            - Commit: ${{ github.sha }}
+            - Branch: ${{ github.head_ref }}
+    
