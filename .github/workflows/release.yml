@@ -29,11 +29,14 @@ jobs:
         
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Run unit tests
         run: npm run test-ci
         env:
           UNIT_TEST_REPORT: ${{ steps.run-unit-tests.outputs.test-report }}
+          
+      - name: Install playwright
+        run: npx playwright install --with-deps
 
       - name: Run e2e tests
         run: npm run e2e-ci
