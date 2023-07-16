@@ -186,20 +186,3 @@ jobs:
           name: build
           path: build/
           retention-days: 30
-
-  # close-issue:
-  #   needs: [issue, deploy]
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: write 
-  #   steps:
-
-  #     - name: Close Issue
-  #       uses: peter-evans/close-issue@v3
-  #       with:
-  #         issue-number: ${{ needs.issue.outputs.issue_number }}
-  #         comment: Auto-closing issue
-  #     # - name: Close Issue
-  #     #   run: gh issue close --comment "Auto-closing issue" "${{ needs.issue.outputs.issue_number }}"
-  #     #   env:
-  #     #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
