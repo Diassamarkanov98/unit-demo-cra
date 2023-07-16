@@ -76,12 +76,3 @@ jobs:
           name: build
           path: build/
           retention-days: 30
-
-      - name: Close Issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          BRANCH =${{ github.ref_name }}
-          ISSUE_TITLE="Release ${BRANCH#*-} by ${{ github.actor }}"
-          ISSUE_ID=$(gh issue list --json number,title,labels -q \
-            ".[] | select(.title == \"${ISSUE_TITLE}\" and .labels[].name == \"RELEASE\") | .number")
