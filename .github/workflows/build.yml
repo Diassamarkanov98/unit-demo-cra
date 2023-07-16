@@ -81,7 +81,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          Branch =${{ github.ref_name }}
-          Issue-title="Release ${BRANCH#*-} by ${{ github.actor }}"
-          Issue_id=$(gh issue list --json number,title,labels -q \
-            ".[] | select(.title == \"${Issue-title}\" and .labels[].name == \"RELEASE\") | .number")
+          BRANCH =${{ github.ref_name }}
+          ISSUE_TITLE="Release ${BRANCH#*-} by ${{ github.actor }}"
+          ISSUE_ID=$(gh issue list --json number,title,labels -q \
+            ".[] | select(.title == \"${ISSUE_TITLE}\" and .labels[].name == \"RELEASE\") | .number")
