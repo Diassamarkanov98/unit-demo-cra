@@ -247,7 +247,7 @@ jobs:
             process.env.GH_PAGES_URL = '${{ steps.get-pages-url.outputs.url }}';
 
             if (existingIssue) {
-              const update = { ...issue, issue_number: existingIssue.number, body: [GitHub Pages URL: ${process.env.GH_PAGES_URL}, description], state: 'open' };
+              const update = { ...issue, issue_number: existingIssue.number, body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}\n\n${description}`, state: 'open' };
               await github.rest.issues.update(update);
             } else {
               const create = { ...issue, title: title, body: description };
