@@ -100,7 +100,7 @@ jobs:
     needs: issue
 
     outputs:
-      unit_test_id: ${{ github.job.id }}
+      unit_test_id: ${{ github.job.container.id }}
 
     steps:
       - uses: actions/checkout@v3
@@ -245,8 +245,8 @@ jobs:
             const existingIssue = issues.data.find(i => i.title === title);
             process.env.GH_PAGES_URL = `https://${owner}.github.io/${repo}` ;
 
-            const unitTestId = '${{ needs.unit-tests.outputs.unit_test_id }}';
-            const e2eTestId = '${{ needs.e2e-tests.outputs.e2e_test_id }}';
+            const unitTestId = ${{ needs.unit-tests.outputs.unit_test_id }};
+            const e2eTestId = ${{ needs.e2e-tests.outputs.e2e_test_id }};
             
             const unitTestLink = `[Unit Test Results](https://github.com/${owner}/${repo}/actions/runs/${{ github.run_id }}/jobs/${unitTestId})`; 
             const e2eTestLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ github.run_id }}/jobs/${e2eTestId})`;
