@@ -30,6 +30,12 @@ jobs:
       - name: Generate changelog
         run: auto-changelog --commit-limit false --template keepachangelog
 
+      - name: Save Changelog Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog-artifact
+          path: CHANGELOG.md
+
       - name: Create Issue
         id: create_issue
         uses: actions/github-script@v6
@@ -208,7 +214,13 @@ jobs:
           name: build
           path: build/
           retention-days: 30
-          
+
+      - name: Download Changelog Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: changelog-artifact
+          path: CHANGELOG.md
+
       - name: Get GitHub Pages URL
         id: get-pages-url
         run: |
@@ -217,7 +229,7 @@ jobs:
         env:
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-    
+
       - name: Update Issue
         uses: actions/github-script@v6
         with:
@@ -231,23 +243,21 @@ jobs:
             const issue = { owner, repo, labels: ['RELEASE'] };
             const issues = await github.rest.issues.listForRepo({ ...issue, state: 'all' });
             const existingIssue = issues.data.find(i => i.title === title);
-  
+
             if (existingIssue) {
               const update = { ...issue, issue_number: existingIssue.number, body: description, state: 'open' };
               await github.rest.issues.update(update);
-              return existingIssue.number;
             } else {
               const create = { ...issue, title: title, body: description };
               const response = await github.rest.issues.create(create);
-              return response.data.number;
             }
-  
+
+            // Add GitHub Pages URL to the issue if it exists
             if (process.env.GH_PAGES_URL) {
               await github.rest.issues.createComment({
                 owner,
                 repo,
-                issue_number: existingIssue.number,
+                issue_number: existingIssue?.number || response.data.number, // Issue number from existing or created issue
                 body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}`
               });
             }
-  
