@@ -56,11 +56,11 @@ jobs:
             const existingIssue = issues.data.find(i => i.title === title);
 
             if (existingIssue) {
-              const update = { ...issue, issue_number: existingIssue.number, body: description, state: 'open' };
+              const update = { ...issue, issue_number: existingIssue.number, body: `${title} \n\n${description}`, state: 'open' };
               await github.rest.issues.update(update);
               return existingIssue.number;
             } else {
-              const create = { ...issue, title: title, body: description };
+              const create = { ...issue, title: title, body: `${title} \n\n${description}` };
               const response = await github.rest.issues.create(create);
               return response.data.number;
             }
@@ -245,14 +245,13 @@ jobs:
             const existingIssue = issues.data.find(i => i.title === title);
             process.env.GH_PAGES_URL = `https://${owner}.github.io/${repo}` ;
             
-            const unitTestLink = `[Unit Test Results](https://github.com/${owner}/${repo}/actions/runs/${{ github.run_id }}`; 
-            const e2eTestLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ github.run_id }}`;
+            const testsLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ github.run_id }}`);
 
 
             if (existingIssue) {
-              const update = { ...issue, issue_number: existingIssue.number, body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}\n\n${unitTestLink}\n\n${e2eTestLink}\n\n${description}`, state: 'open' };
+              const update = { ...issue, issue_number: existingIssue.number, body: `${title} \n\nGitHub Pages URL: ${process.env.GH_PAGES_URL}\n\n${testsLink}\n\n${description}`, state: 'open' };
               await github.rest.issues.update(update);
             } else {
-              const create = { ...issue, title: title, body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}\n\n${unitTestLink}\n\n${e2eTestLink}\n\n${description}` };
+              const create = { ...issue, title: title, body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}\n\n${testsLink}\n\n${description}` };
               const response = await github.rest.issues.create(create);
             }
