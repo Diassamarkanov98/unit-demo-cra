@@ -246,8 +246,8 @@ jobs:
             process.env.GH_PAGES_URL = `https://${owner}.github.io/${repo}` ;
 
 
-            const unitTestLink = `[Unit Test Results](https://github.com/${owner}/${repo}/actions/runs/${{ env.UNIT_TEST_RUN_ID }}?check_suite_focus=true#artifacts)`; 
-            const e2eTestLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ env.E2E_TEST_RUN_ID }}?check_suite_focus=true#artifacts)`;
+            const unitTestLink = `[Unit Test Results](https://github.com/${owner}/${repo}/actions/runs/${{ env.UNIT_TEST_RUN_ID }}`; 
+            const e2eTestLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ env.E2E_TEST_RUN_ID }}`;
 
 
             if (existingIssue) {
