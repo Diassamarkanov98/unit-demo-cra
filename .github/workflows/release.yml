@@ -118,9 +118,13 @@ jobs:
           path: junit.xml
           retention-days: 30 
 
-      - name: Set E2E Test Run ID
+      - name: Set Unit Test Run ID
         id: unit_test_id
-        run: echo "UNIT_TEST_RUN_ID=${{ github.run_id }}" >> $GITHUB_ENV
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log('UNIT_TEST_RUN_ID=' + github.run_id);
 
   e2e-tests:
     runs-on: ubuntu-latest
@@ -154,7 +158,11 @@ jobs:
 
       - name: Set E2E Test Run ID
         id: e2e_test_id
-        run: echo "E2E_TEST_RUN_ID=${{ github.run_id }}" >> $GITHUB_ENV
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log('E2E_TEST_RUN_ID=' + github.run_id);
 
   code-lint:
     runs-on: ubuntu-latest
@@ -248,8 +256,8 @@ jobs:
             process.env.GH_PAGES_URL = `https://${owner}.github.io/${repo}` ;
 
 
-            const unitTestLink = `[Unit Test Results](https://github.com/${owner}/${repo}/actions/runs/${{ env.UNIT_TEST_RUN_ID }})`; 
-            const e2eTestLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ env.E2E_TEST_RUN_ID }})`;
+            const unitTestLink = `[Unit Test Results](https://github.com/${owner}/${repo}/actions/runs/${{ needs.unit-tests.outputs.UNIT_TEST_RUN_ID }})`; 
+            const e2eTestLink = `[E2E Test Report](https://github.com/${owner}/${repo}/actions/runs/${{ needs.e2e-tests.outputs.E2E_TEST_RUN_ID }})`;
 
 
             if (existingIssue) {
