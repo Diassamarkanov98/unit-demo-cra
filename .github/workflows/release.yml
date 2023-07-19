@@ -100,7 +100,7 @@ jobs:
     needs: issue
 
     outputs:
-      unit_test_id: ${{ github.job.container.id }}
+      unit_test_id: ${{ github.job.id }}
 
     steps:
       - uses: actions/checkout@v3
@@ -126,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: issue
     outputs:
-      e2e_test_id: ${{ github.job.container.id }}
+      e2e_test_id: ${{ github.job.id }}
     steps:
       - uses: actions/checkout@v3
 
