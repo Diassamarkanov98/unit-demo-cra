@@ -222,15 +222,6 @@ jobs:
         with:
           name: changelog-artifact
 
-      - name: Get GitHub Pages URL
-        id: get-pages-url
-        run: |
-          echo "https://$GITHUB_REPOSITORY_OWNER.github.io/$GITHUB_REPOSITORY/"
-          echo "::set-output name=url::https://$GITHUB_REPOSITORY_OWNER.github.io/$GITHUB_REPOSITORY/"
-        env:
-          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
       - name: Update Issue
         uses: actions/github-script@v6
         with:
@@ -244,7 +235,7 @@ jobs:
             const issue = { owner, repo, labels: ['RELEASE'] };
             const issues = await github.rest.issues.listForRepo({ ...issue, state: 'all' });
             const existingIssue = issues.data.find(i => i.title === title);
-            process.env.GH_PAGES_URL = '${{ steps.get-pages-url.outputs.url }}'.toLowerCase();
+            process.env.GH_PAGES_URL = `https://diassamarkanov98.github.io/${{ github.repository }}` ;
 
             if (existingIssue) {
               const update = { ...issue, issue_number: existingIssue.number, body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}\n\n${description}`, state: 'open' };
