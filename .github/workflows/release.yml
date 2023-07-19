@@ -184,7 +184,7 @@ jobs:
     needs: [commit-lint, code-lint, e2e-tests, unit-tests]
     runs-on: ubuntu-latest
     permissions:
-      contents: write 
+      write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -244,23 +244,12 @@ jobs:
             const issue = { owner, repo, labels: ['RELEASE'] };
             const issues = await github.rest.issues.listForRepo({ ...issue, state: 'all' });
             const existingIssue = issues.data.find(i => i.title === title);
+            process.env.GH_PAGES_URL = '${{ steps.get-pages-url.outputs.url }}';
 
             if (existingIssue) {
-              const update = { ...issue, issue_number: existingIssue.number, body: description, state: 'open' };
+              const update = { ...issue, issue_number: existingIssue.number, body: [GitHub Pages URL: ${process.env.GH_PAGES_URL}, description], state: 'open' };
               await github.rest.issues.update(update);
             } else {
               const create = { ...issue, title: title, body: description };
               const response = await github.rest.issues.create(create);
-            }
-
-            process.env.GH_PAGES_URL = '${{ steps.get-pages-url.outputs.url }}';
-
-
-            if (process.env.GH_PAGES_URL) {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number: existingIssue?.number || response.data.number, // Issue number from existing or created issue
-                body: `GitHub Pages URL: ${process.env.GH_PAGES_URL}`
-              });
             }
