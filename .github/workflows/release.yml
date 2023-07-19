@@ -3,6 +3,8 @@ on:
   push:
     tags:
       - "v*"
+env:  
+  GH_PAGES_URL: ''
 jobs:
   issue:
     runs-on: ubuntu-latest
@@ -219,7 +221,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: changelog-artifact
-          path: CHANGELOG.md
 
       - name: Get GitHub Pages URL
         id: get-pages-url
@@ -252,7 +253,9 @@ jobs:
               const response = await github.rest.issues.create(create);
             }
 
-            // Add GitHub Pages URL to the issue if it exists
+            process.env.GH_PAGES_URL = '${{ steps.get-pages-url.outputs.url }}';
+
+
             if (process.env.GH_PAGES_URL) {
               await github.rest.issues.createComment({
                 owner,
