@@ -1,4 +1,5 @@
 По всем вопросам писать в телегу: @Darkdecision
+
 ## Инфраструктура
 в package.json добавлена зависимость инструмента commitlint(cli, config-conventional)
 ## Тесты
